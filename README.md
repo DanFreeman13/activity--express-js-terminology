@@ -11,11 +11,11 @@ It is a framework and is the primary library for other node frameworks which pro
 
 **2. How do you call the function responsibly for processing browser requests?**
 
-app.get()
+Request handlers.
 
 **3. Name two core components from `Express.js`**
 
-the middleware elements req (request), res (response)
+middleware, routing
 
 **4. Write a _Hello World_ in Express**
 
@@ -26,6 +26,11 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))`
 
+
+** Who wrote Express.js
+
+Ryan Dahl in 2009.
+
 ## Part II
 
 **5. Refactor code from last assignment and implement Express.js**
@@ -33,6 +38,12 @@ app.listen(3000, () => console.log('Example app listening on port 3000!'))`
 ## Part III
 
 **6. Implement an environment variable to take the PORT number, if it exists.**
+
+1. What is an environment variable
+
+Las variables de entorno sirven para definir parámetros sencillos de configuración de los programas, de modo que éstos puedan ejecutarse en diferentes ambientes sin necesidad de modificar el código fuente de un script.
+
+2. How do you access an environment variable using NODE
 
 ## Part IV
 
