@@ -13,7 +13,7 @@ const api = require('./src/routes/api.js');
 app.use(logger('dev'));
 
 //configure static files
-app.use('/static', express.static('/Public'));
+app.use('/static', express.static('Public'));
 app.set('views', './src/views');
 app.set('view engine', 'pug');
 
