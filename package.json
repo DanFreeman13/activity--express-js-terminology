@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "chalk": "^2.4.1",
+    "cors": "^2.8.4",
     "express": "^4.16.3",
     "morgan": "^1.9.0",
     "nodemon": "^1.18.4",

@@ -9,24 +9,24 @@ const Controller = {
     });
   },
   getById: (request, response) => {
-
     const theCompany = companies.data.filter(company => {
       return company.id === parseInt(request.params.companyId);
     });
 
-    if (theCompany.length) {
-      response
+    response
       .json({
         data: theCompany[0]
       })
       status(200);
-    } else {
+    },
+    create: (request, response) => {
       response
-      .json({
-        message: 'Not Company Found'
-      })
+        .json({
+          type: 'POST Request',
+          data: request.body
+        })
+        .status(200);
     }
-  }
 };
 
 module.exports = Controller;
