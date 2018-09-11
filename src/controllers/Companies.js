@@ -26,6 +26,13 @@ const Controller = {
           data: request.body
         })
         .status(200);
+    },
+    removeCompany: (request, response) => {
+      response
+      .json({
+        type: 'DELETE'
+      })
+      .status(200);
     }
 };
 
