@@ -2,12 +2,22 @@
 const express = require('express')
 const chalk = require('chalk');
 const logger = require('morgan');
+const mongoose = require('mongoose');
+
+//Import all the routes configuration
+const api = require('./src/routes/api.js');
 
 const app = express();
-const indexFile = `${ __dirname }/index.html`;
+// const indexFile = `${ __dirname }/index.html`;
 const PORT = process.env.PORT || 3000;
 
-const api = require('./src/routes/api.js');
+mongoose.connect('mongodb://localhost:27017/restApi', {
+  useNewUrlParser: true
+});
+
+mongoose.connection.on('connected', () => {
+  console.log('Successful')
+});
 
 // Middleware
 app.use(logger('dev'));

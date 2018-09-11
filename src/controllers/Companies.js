@@ -1,31 +1,64 @@
+//Import JSON DATA from a local file
 const companies = require('../../companies.json');
+const mongoose = require('mongoose');
+const Company = require('../models/Company');
 
+/**
+* Conpanies
+*
+*     `index()`
+*     `getById()`
+*/
 const Controller = {
   index: (request, response) => {
-    response
-    .status(200)
-    .json({
-      companies
-    });
+    Company
+      .find()
+      .exec()
+      .then(data => {
+        response
+        .json({
+          companies: data
+        })
+        .status(200)
+      });
   },
   getById: (request, response) => {
-    const theCompany = companies.data.filter(company => {
-      return company.id === parseInt(request.params.companyId);
-    });
+    /**
+    * [1] Acces the `companyId` from URL through `request.params` object.
+    * [2] Filter data and return if the companyId exists.
+    */
+    const { companyId } = request.params;
+
+    // Logic
 
     response
       .json({
-        data: theCompany[0]
+        data: Company
       })
-      status(200);
+      .status(200);
     },
     create: (request, response) => {
-      response
-        .json({
-          type: 'POST Request',
-          data: request.body
+      const newCompany = new Company({
+        _id: new mongoose.Types.ObjectId(),
+        name: request.body.name
+      });
+
+      newCompany
+        .save()
+        .then(data => {
+          response
+          .json({
+            data: newCompany
+          })
+          .status(201);
         })
-        .status(200);
+        .catch(error => {
+          response
+            .json({
+              message: error
+            })
+            .status(500)
+        });
     },
     removeCompany: (request, response) => {
       response
