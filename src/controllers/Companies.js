@@ -30,12 +30,18 @@ const Controller = {
     const { companyId } = request.params;
 
     // Logic
-
-    response
-      .json({
-        data: Company
+    Company
+      .find({
+        _id: companyId
       })
-      .status(200);
+      .then(data => {
+        response
+          .json({
+            data: data
+          })
+          .status(200);
+      });
+
     },
     create: (request, response) => {
       const newCompany = new Company({
@@ -61,11 +67,20 @@ const Controller = {
         });
     },
     removeCompany: (request, response) => {
-      response
-      .json({
-        type: 'DELETE'
-      })
-      .status(200);
+
+      const { companyId } = request.params;
+      console.log(request);
+      Company
+        .find({
+          _id: companyId
+        })
+        .remove(data => {
+          response
+            .json({
+              message: "Removed id successfuly"
+            })
+            .status(200);
+        });
     }
 };
 
