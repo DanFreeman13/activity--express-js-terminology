@@ -1,22 +1,23 @@
+require('dotenv').config()
 //Import Modules
-const express = require('express')
 const chalk = require('chalk');
+const express = require('express')
 const logger = require('morgan');
 const mongoose = require('mongoose');
-
 //Import all the routes configuration
 const api = require('./src/routes/api.js');
 
+// call for Express and localHost Port
 const app = express();
 // const indexFile = `${ __dirname }/index.html`;
 const PORT = process.env.PORT || 3000;
 
-mongoose.connect('mongodb://localhost:27017/restApi', {
+//configure MongoDb
+mongoose.connect(process.env.MONGODB_URI, {
   useNewUrlParser: true
 });
-
 mongoose.connection.on('connected', () => {
-  console.log('Successful')
+  console.log('MongoDB Successfuly runing on mongodb://localhost:27017/restApi')
 });
 
 // Middleware

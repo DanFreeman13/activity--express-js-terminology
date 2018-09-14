@@ -1,67 +1,83 @@
-const Job = require ('../models/Job');
 const mongoose = require('mongoose');
+const Job = require ('../models/Job');
 
 const Controller = {
   index: (request, response) => {
     Job
       .find()
+      .populate('Company')
       .exec()
       .then(data => {
-        response
-          .json({
-            jobs: data
-          })
-          .status(200)
-      });
+        if (data.length > 0) {
+          response
+            .status(200)
+            .json({
+              total: data.length,
+              jobs: data
+            })
+        } else {
+          response
+            .status(404)
+            .json({
+              message: "No data in database"
+            })
+        };
+
+      })
   },
   getById: (request, response) => {
-    const { jobId } = request.params;
-
-    response
-      .json({
-        data: Job
-      })
-      .status(200)
+    Job
+      .findById(request.params.jobId)
+      .exec()
+      .then(job => {
+        response
+          .status(200)
+          .json({
+            data: Job
+          });
+      });
   },
   create: (request, response) => {
     const newJob = new Job({
       _id: new mongoose.Types.ObjectId(),
-      name: request.body.name
+      title: request.body.title,
+      years: request.body.years,
+      company: request.body.companyId
     });
 
     newJob
       .save()
-      .then(data => {
+      .then(newRecord => {
         response
+          .status(201)
           .json({
-            data: newJob
-          })
-          .status(201);
+            data: newRecord
+          });
       })
       .catch(error => {
+        const errors = [
+          {
+            title: error.errors.title.message
+          }, {
+            years: error.errors.years.message
+          }
+        ];
+
         response
+          .status(400)
           .json({
-            message: error
-          })
-          .status(500);
+            errors
+          });
       });
   },
   removeJob: (request, response) => {
-
-    const { JobId } = request.params;
-    console.log(request);
     Job
-      .find({
-        _id: JobId
-      })
-      .remove(data => {
+      .findByIdAndDelete(request.params.jobId)
+      .then(() => {
         response
-          .json({
-            message: "Removed id successfuly"
-          })
-          .status(200);
+          .sendStatus(204);
       });
-  }
+    }
 };
 
 module.exports = Controller;

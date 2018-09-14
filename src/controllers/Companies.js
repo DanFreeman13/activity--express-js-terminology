@@ -1,5 +1,5 @@
 //Import JSON DATA from a local file
-const companies = require('../../companies.json');
+// const companies = require('../../companies.json');
 const mongoose = require('mongoose');
 const Company = require('../models/Company');
 
@@ -16,10 +16,11 @@ const Controller = {
       .exec()
       .then(data => {
         response
-        .json({
-          companies: data
-        })
-        .status(200)
+          .status(200)
+          .json({
+            total: data.length,
+            companies: data
+          })
       });
   },
   getById: (request, response) => {
@@ -34,13 +35,30 @@ const Controller = {
       .find({
         _id: companyId
       })
+      .exec()
       .then(data => {
+        if (data === null) {
+          response
+            .status(404)
+            .json({
+              message: `Company not found with provided id ${ companyId }`
+            });
+        } else {
+          response
+            .status(200)
+            .json({
+              company: data
+            });
+        }
+
+      })
+      .catch(error => {
         response
+          .status(500)
           .json({
-            data: data
-          })
-          .status(200);
-      });
+            message: error.message
+          });
+      })
 
     },
     create: (request, response) => {
@@ -53,33 +71,48 @@ const Controller = {
         .save()
         .then(data => {
           response
+          .status(201)
           .json({
             data: newCompany
-          })
-          .status(201);
+          });
         })
         .catch(error => {
           response
+          .status(500)
             .json({
               message: error
-            })
-            .status(500)
+            });
         });
     },
     removeCompany: (request, response) => {
 
       const { companyId } = request.params;
-      console.log(request);
       Company
-        .find({
+        .findById({
           _id: companyId
         })
         .remove(data => {
           response
             .json({
-              message: "Removed id successfuly"
+              message: "Removed company id successfuly"
             })
             .status(200);
+        });
+    },
+    updateById: (request, response) => {
+      Company
+        .findOneAndUpdate({
+          id_: request.params.companyId
+        }, {
+          name: request.body.name
+        })
+        .exec()
+        .then(data => {
+          response
+            .status(200)
+            .json({
+              message: "Updated Post"
+            });
         });
     }
 };
