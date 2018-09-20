@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node app.js",
-    "secondStart": "nomode app.js"
+    "secondStart": "nodemon app.js"
   },
   "repository": {
     "type": "git",
@@ -20,6 +20,7 @@
   },
   "homepage": "https://github.com/muktekguest/linkedin#readme",
   "dependencies": {
+    "bcrypt": "^3.0.0",
     "chalk": "^2.4.1",
     "dotenv": "^6.0.0"
   },

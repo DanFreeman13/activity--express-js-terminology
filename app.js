@@ -44,6 +44,8 @@ app.get('/', (request, response) => {
   });
 });
 
+//CORS
+
 app.use((request, response, next) => {
   response.header('Acces-Control-Allow-Origin','*');
   response.header(

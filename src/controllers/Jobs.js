@@ -5,37 +5,26 @@ const Controller = {
   index: (request, response) => {
     Job
       .find()
+      // .select('title')
       .populate('Company')
       .exec()
-      .then(data => {
-        if (data.length > 0) {
+      .then(jobs => {
+        if (jobs.length > 0) {
           response
             .status(200)
             .json({
-              total: data.length,
-              jobs: data
+              total: jobs.length,
+              data: jobs
             })
         } else {
           response
-            .status(404)
+            .status(200)
             .json({
               message: "No data in database"
-            })
-        };
-
+            });
+        }
       })
-  },
-  getById: (request, response) => {
-    Job
-      .findById(request.params.jobId)
-      .exec()
-      .then(job => {
-        response
-          .status(200)
-          .json({
-            data: Job
-          });
-      });
+      .catch(error => console.log(error));
   },
   create: (request, response) => {
     const newJob = new Job({
@@ -55,18 +44,33 @@ const Controller = {
           });
       })
       .catch(error => {
-        const errors = [
-          {
-            title: error.errors.title.message
-          }, {
-            years: error.errors.years.message
-          }
-        ];
+        // const errors = [
+        //   {
+        //     title: error.errors.title.message
+        //   }, {
+        //     years: error.errors.years.message
+        //   }
+        // ];
 
         response
           .status(400)
           .json({
-            errors
+            error
+          });
+        });
+  },
+
+
+  getById: (request, response) => {
+    Job
+      .findById(request.params.jobId)
+      .populate('Company')
+      .exec()
+      .then(job => {
+        response
+          .status(200)
+          .json({
+            data: job
           });
       });
   },

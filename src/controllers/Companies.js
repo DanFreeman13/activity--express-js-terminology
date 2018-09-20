@@ -32,7 +32,7 @@ const Controller = {
 
     // Logic
     Company
-      .find({
+      .findById({
         _id: companyId
       })
       .exec()
@@ -41,25 +41,27 @@ const Controller = {
           response
             .status(404)
             .json({
-              message: `Company not found with provided id ${ companyId }`
-            });
+              message: `Company not found with provided id ${ companyId }.`,
+              status: '404'
+            })
         } else {
-          response
+          reponse
             .status(200)
             .json({
-              company: data
+              errors: data,
+              status: '200'
             });
-        }
-
+          }
       })
       .catch(error => {
+        console.log(error);
         response
-          .status(500)
+          .status(400)
           .json({
-            message: error.message
+            message: error.message,
+            status: '400'
           });
       })
-
     },
     create: (request, response) => {
       const newCompany = new Company({
@@ -88,15 +90,12 @@ const Controller = {
 
       const { companyId } = request.params;
       Company
-        .findById({
+        .findByIdAndDelete({
           _id: companyId
         })
-        .remove(data => {
-          response
-            .json({
-              message: "Removed company id successfuly"
-            })
-            .status(200);
+        .exec()
+        .then(() => {
+          response.sendStatus(204);
         });
     },
     updateById: (request, response) => {
